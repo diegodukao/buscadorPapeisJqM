@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
+        
+        <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.3.0.min.js"></script>       
+        
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="busca">
+            <div data-theme="d" data-role="header">
+                <h3>
+                    Busca papéis
+                </h3>
+            </div>
+            <div data-role="content">
+                <form action="">
+                    <div data-role="fieldcontain">  <!-- data-role="fieldcontain" -->
+                        <fieldset data-role="controlgroup"> <!--data-role="controlgroup" -->
+                            <label for="tbPlMin">
+                                P/L mínimo
+                            </label>
+                            <input name="" id="tbPlMin" placeholder="" value="" type="text" />                            
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="tbPlMax">
+                                P/L máximo
+                            </label>
+                            <input name="" id="tbPlMax" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="tbRoeMin">
+                                ROE mín:
+                            </label>
+                            <input name="" id="tbRoeMin" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="tbRoeMax">
+                                ROE máx:
+                            </label>
+                            <input name="" id="tbRoeMax" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="tbDivPatrMin">
+                                Dívida / patr. mín:
+                            </label>
+                            <input name="" id="tbDivPatrMin" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <div data-role="fieldcontain">
+                        <fieldset data-role="controlgroup">
+                            <label for="tbDivPatrMax">
+                                Dívida / patr. máx:
+                            </label>
+                            <input name="" id="tbDivPatrMax" placeholder="" value="" type="text" />
+                        </fieldset>
+                    </div>
+                    <input type="button" id="btnBuscaEmpresa" value="Buscar" />
+                    <!--  data-icon="search"
+                     data-iconpos="right" -->
+
+                </form>
+            </div>
+            <div data-theme="d" data-role="footer">
+                <h3>
+                    Feito com jQuery Mobile
+                </h3>
+            </div>
+        </div>
+        <div data-role="page" id="resultadoBusca">
+            <div data-theme="d" data-role="header">
+                <h3>
+                    Resultado da busca
+                </h3>
+            </div>
+
+            <div data-role="content">
+                <table id="tblResultadoBusca" data-role="table" data-column-btn-text="Colunas" class="ui-responsive table-stroke">
+                    <!--data-mode="columntoggle" -->
+                    <!-- TODO: ver se vou usar reflow ou column toggle -->
+                    <thead>
+                        <tr class="ui-bar-d">
+                            <th>Nome</th>                        
+                            <th >Cotacao</th> <!--data-priority="5" -->                       
+                            <th >Dív/patr</th>                        
+                            <th >Patr. líq.</th>                        
+                            <th >P/L</th>                        
+                            <th >ROE</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div data-theme="d" data-role="footer">
+                <h3>
+                    Feito com jQuery Mobile
+                </h3>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            
+            jQuery.support.cors = true;
+
+            //evento de busca de papéis
+            $("#btnBuscaEmpresa").on("click" , function(event) {
+                event.preventDefault();
+                // validar inputs
+                // pegar entradas
+                // TODO: validar entradas antes
+                var serviceUrl = 'http://buscadorpapeis-prospeccaohtml5.rhcloud.com/buscadorpapeis/rest/papeis/buscar?plMin'+
+                    $('#tbPlMin').val()+"&"+
+                    "plMax="+$('#tbPlMax').val()+"&"+
+                    "roeMin="+$('#tbRoeMin').val()+"&"+
+                    "roeMax="+$('#tbRoeMax').val()+"&"+
+                    "divBrutaMin="+$('#tbDivPatrMin').val()+"&"+
+                    "divBrutaMax="+$('#tbDivPatrMax').val();
+                // construir urls
+                $.ajax( {
+                    type: 'Get',                                       
+                    url: serviceUrl,                    
+                    success: function(data) {
+                        //alert("resultado da busca: "+data);
+                        carregarResultadoBusca(data);
+                        //$.mobile.navigate("#resultadoBusca");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert("cors: "+jQuery.support.cors+"Erro na requisicao: "+textStatus+" - "+errorThrown);
+                    }                 
+                })  
+                ;
+                $.mobile.navigate("#resultadoBusca");
+            });
+
+            //tratamento da resposta da busca na página de resultados
+            function carregarResultadoBusca(data) {
+                var result = $.parseJSON(data);
+                var r = new Array(), j = -1;
+                for (var i = 0; i < result.length; i++) {
+                    var nome = result[i].nome;
+                    var cotacaoAtual = parseFloatStringInBrLocale(result[i].cotacaoAtual);
+                    var dividaBrutaSobrePatrimonio = parseFloatStringInBrLocale(result[i].dividaBrutaSobrePatrimonio);
+                    var patrimonioLiquido = parseFloatStringInBrLocale(result[i].patrimonioLiquido);
+                    var pL = parseFloatStringInBrLocale(result[i].precoSobreLucro);
+                    var roe = parseFloatStringInBrLocale(result[i].retornoSobrePatrimonio);
+                    console.log(nome+" - "+cotacaoAtual+" - "+dividaBrutaSobrePatrimonio+" - "+patrimonioLiquido+" - "
+                        +pL+" - "+roe);
+                    // montagem da linha da tabela
+                    r[++j]='<tr><td>';
+                    r[++j] = nome;
+                    r[++j] = '</td><td>';
+                    r[++j] = cotacaoAtual;
+                    r[++j] = '</td><td>';
+                    r[++j] = dividaBrutaSobrePatrimonio;
+                    r[++j] = '</td><td>';
+                    r[++j] = patrimonioLiquido;
+                    r[++j] = '</td><td>';
+                    r[++j] = pL;
+                    r[++j] = '</td><td>';
+                    r[++j] = roe;
+                    r[++j] = '</td></tr>';                    
+                    $("#tblResultadoBusca tbody").html(r.join(''));
+                };
+            }
+
+            function parseFloatStringInBrLocale(arg) {
+                return parseFloat(arg.replace(".","").replace(",","."));
+            }
+
+        </script>
+
+    </body>
+</html>
