@@ -125,25 +125,28 @@
                 // validar inputs
                 // pegar entradas
                 // TODO: validar entradas antes
-                var serviceUrl = 'http://buscadorpapeis-prospeccaohtml5.rhcloud.com/buscadorpapeis/rest/papeis/buscar?plMin'+
-                    $('#tbPlMin').val()+"&"+
-                    "plMax="+$('#tbPlMax').val()+"&"+
-                    "roeMin="+$('#tbRoeMin').val()+"&"+
-                    "roeMax="+$('#tbRoeMax').val()+"&"+
-                    "divBrutaMin="+$('#tbDivPatrMin').val()+"&"+
-                    "divBrutaMax="+$('#tbDivPatrMax').val();
+                var serviceUrl = 'http://mobilidade.fm/teste/index.php?callback=jsonpCallback';
                 // construir urls
-                $.ajax( {
-                    type: 'Get',                                       
-                    url: serviceUrl,                    
+                $.ajax( {                                     
+                    url: serviceUrl,
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    jsonp: false,
+                    jsonpCallback: 'jsonpCallback',
+                    timeout: 100000,      
                     success: function(data) {
                         //alert("resultado da busca: "+data);
+                        
+                        alert(data);
                         carregarResultadoBusca(data);
-                        //$.mobile.navigate("#resultadoBusca");
+                        $.mobile.navigate("#resultadoBusca");
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         alert("cors: "+jQuery.support.cors+"Erro na requisicao: "+textStatus+" - "+errorThrown);
-                    }                 
+                    },
+                    //beforeSend: function (xhr) {
+                        //xhr.setRequestHeader('Proxy-Connection', 'keep-alive');
+                    //}
                 })  
                 ;
                 $.mobile.navigate("#resultadoBusca");
@@ -151,7 +154,8 @@
 
             //tratamento da resposta da busca na página de resultados
             function carregarResultadoBusca(data) {
-                var result = $.parseJSON(data);
+                debugger;
+                var result = data;
                 var r = new Array(), j = -1;
                 for (var i = 0; i < result.length; i++) {
                     var nome = result[i].nome;
