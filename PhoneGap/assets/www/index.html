@@ -297,11 +297,15 @@
         <table>
             <tr>
                 <td>
-                    <input type="button" id="btnFoto" value="Testar camera"  onClick="capturePhoto();"   />
+                    <input type="button" id="btnFoto" value="Testar camera"  onClick="capturePhoto();"/>
                 </td>
                 <td>
-                    <input type="button" id="btnFoto" value="Tocar Mp3"  onClick="playAudio('media/audio.mp3');"   />
+                    <input type="button" id="btnMp3" value="Tocar Mp3"  onClick="playAudio('media/audio.mp3');"/>
                 </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" id="btnNotification" value="Notificação"  onClick="showNotification();"/></td>
             </tr>
         </table>
     </div>
@@ -501,120 +505,128 @@
     </style>
 
 	<script type="text/javascript" src="cordova-2.5.0.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
+    <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+    
+        // Wait for Cordova to connect with the device
+        //
+        document.addEventListener("deviceready",onDeviceReady,false);
+    
+        app.initialize();
         
-        	// Wait for Cordova to connect with the device
-		    //
-		    document.addEventListener("deviceready",onDeviceReady,false);
+        var cameraOptions;
+        var pictureSource;   // picture source
+        var destinationType; // sets the format of returned value 
+    
         
-            app.initialize();
-            
-            var cameraOptions;
-            var pictureSource;   // picture source
-		    var destinationType; // sets the format of returned value 
-		
-		    
-		
-		    // Cordova is ready to be used!
-		    //
-		    function onDeviceReady() {
-		        pictureSource=navigator.camera.PictureSourceType;
-		        destinationType=navigator.camera.DestinationType;
-		        cameraOptions = { quality : 75,
-				  destinationType : Camera.DestinationType.FILE_URI,
-				  sourceType : Camera.PictureSourceType.CAMERA,
-				  allowEdit : true,
-				  encodingType: Camera.EncodingType.JPEG,
-				  //targetWidth: 100,
-				  //targetHeight: 100,
-				  //popoverOptions: CameraPopoverOptions,
-				  saveToPhotoAlbum: true };
-		    }
-            
-            // Called when a photo is successfully retrieved
-		    //
-		    function onPhotoDataSuccess(imageData) {
-		      // Uncomment to view the base64 encoded image data
-		      // console.log(imageData);
-		
-		      // Get image handle
-		      //
-		      var smallImage = document.getElementById('smallImage');
-		
-		      // Unhide image elements
-		      //
-		      smallImage.style.display = 'block';
-		
-		      // Show the captured photo
-		      // The inline CSS rules are used to resize the image
-		      //
-		      smallImage.src = "data:image/jpeg;base64," + imageData;
-		    }
-            
-            // Called if something bad happens.
-		    // 
-		    function onFail(message) {
-		      alert('Failed because: ' + message);
-		    }
-            
-            function capturePhoto() {
-		      // Take picture using device camera and retrieve image as base64-encoded string
-		      navigator.camera.getPicture(onPhotoDataSuccess, onFail, cameraOptions);
-		    }
-            
-            
-            // MP3 PLAYER
-            //#######################################
-            function getPhoneGapPath() {
-                var path = window.location.pathname;
-                path = path.substr( 0, path.length - 10 );
-                return 'file://' + path;
-            };
+    
+        // Cordova is ready to be used!
+        //
+        function onDeviceReady() {
+            pictureSource=navigator.camera.PictureSourceType;
+            destinationType=navigator.camera.DestinationType;
+            cameraOptions = { quality : 75,
+              destinationType : Camera.DestinationType.FILE_URI,
+              sourceType : Camera.PictureSourceType.CAMERA,
+              allowEdit : true,
+              encodingType: Camera.EncodingType.JPEG,
+              //targetWidth: 100,
+              //targetHeight: 100,
+              //popoverOptions: CameraPopoverOptions,
+              saveToPhotoAlbum: true };
+        }
+        
+        // Called when a photo is successfully retrieved
+        //
+        function onPhotoDataSuccess(imageData) {
+          // Uncomment to view the base64 encoded image data
+          // console.log(imageData);
+    
+          // Get image handle
+          //
+          var smallImage = document.getElementById('smallImage');
+    
+          // Unhide image elements
+          //
+          smallImage.style.display = 'block';
+    
+          // Show the captured photo
+          // The inline CSS rules are used to resize the image
+          //
+          smallImage.src = "data:image/jpeg;base64," + imageData;
+        }
+        
+        // Called if something bad happens.
+        // 
+        function onFail(message) {
+          alert('Failed because: ' + message);
+        }
+        
+        function capturePhoto() {
+          // Take picture using device camera and retrieve image as base64-encoded string
+          navigator.camera.getPicture(onPhotoDataSuccess, onFail, cameraOptions);
+        }
+        
+        
+        // MP3 PLAYER
+        //#######################################
+        function getPhoneGapPath() {
+            var path = window.location.pathname;
+            path = path.substr( 0, path.length - 10 );
+            return 'file://' + path;
+        };
 
-            function playAudio(song_path) {
-                // Create Media object from src
-                //my_media = new Media(src, onSuccess, onError);
-                src = getPhoneGapPath() + song_path;
-                var my_media = new Media(src, onSuccess, onError);
+        function playAudio(song_path) {
+            // Create Media object from src
+            //my_media = new Media(src, onSuccess, onError);
+            src = getPhoneGapPath() + song_path;
+            var my_media = new Media(src, onSuccess, onError);
 
-                // Play audio
-                my_media.play();
+            // Play audio
+            my_media.play();
 
-                // Update my_media position every second
-                //if (mediaTimer == null) {
-                    //mediaTimer = setInterval(function() {
-                    var mediaTimer = setInterval(function() {
-                        // get my_media position
-                        my_media.getCurrentPosition(
-                            // success callback
-                            function(position) {
-                                if (position > -1) {
-                                    setAudioPosition((position) + " sec");
-                                }
-                            },
-                            // error callback
-                            function(e) {
-                                console.log("Error getting pos=" + e);
-                                setAudioPosition("Error: " + e);
+            // Update my_media position every second
+            //if (mediaTimer == null) {
+                //mediaTimer = setInterval(function() {
+                var mediaTimer = setInterval(function() {
+                    // get my_media position
+                    my_media.getCurrentPosition(
+                        // success callback
+                        function(position) {
+                            if (position > -1) {
+                                setAudioPosition((position) + " sec");
                             }
-                        );
-                    }, 1000);
-                //}
-            };
+                        },
+                        // error callback
+                        function(e) {
+                            console.log("Error getting pos=" + e);
+                            setAudioPosition("Error: " + e);
+                        }
+                    );
+                }, 1000);
+            //}
+        };
 
-            function onSuccess() {
-                console.log("playAudio():Audio Success");
-            };
+        function onSuccess() {
+            console.log("playAudio():Audio Success");
+        };
 
-            // onError Callback 
-            //
-            function onError(error) {
-                alert('code: '    + error.code    + '\n' + 
-                      'message: ' + error.message + '\n');
-            };
-            //#############################################
-     </script>
+        // onError Callback 
+        //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' + 
+                  'message: ' + error.message + '\n');
+        };
+        //#############################################
+        
+        //NOTIFICATION BAR
+        //#############################################
+        function showNotification() {
+            window.plugins.statusBarNotification.notify("Teste de notificação", "Funcionou!");
+        }
+        //#############################################
+    </script>
 
     </body>
     </html>
