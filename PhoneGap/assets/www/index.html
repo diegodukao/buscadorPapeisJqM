@@ -58,13 +58,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <!-- botoes demo phonegap -->
                     <td></td>
-                    <td>
-                        <input type="button" id="btnFoto" value="Testar camera"  onClick="capturePhoto();"   />
-                    </td>
-                    <td>
-                        <input type="button" id="btnFoto" value="Tocar Mp3"  onClick="playAudio('media/audio.mp3');"   />
+                    <td colspan="2">
+                        <a href="#demosPhonegap" data-role="button" data-transition="slide">Demos PhoneGap</a>
                     </td>
                 </tr>
             </table>
@@ -289,6 +285,38 @@
     </center>
 </div>
 
+</div>
+
+<div data-role="page" id="demosPhonegap">
+    <div data-theme="d" data-role="header">
+        <a href="#" data-icon="home" data-transition="slide" data-rel="back">Home</a>
+        <h1>Demos PhoneGap</h1>
+    </div>
+    
+    <div data-role="content">
+        <table>
+            <tr>
+                <td>
+                    <input type="button" id="btnFoto" value="Testar camera"  onClick="capturePhoto();"   />
+                </td>
+                <td>
+                    <input type="button" id="btnFoto" value="Tocar Mp3"  onClick="playAudio('media/audio.mp3');"   />
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    
+    <div data-theme="d" data-role="footer">
+        <h3>
+            Feito com jQuery Mobile
+        </h3>
+    </div>
+    <div data-theme="g" data-role="footer">
+        <center>
+            <img src="css/images/Principal_h-RGB_baixa.jpg" width="160px" />
+        </center>
+    </div>
 </div>
 
 <script type="text/javascript">
