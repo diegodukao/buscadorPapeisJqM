@@ -21,7 +21,7 @@
     <div data-role="page" id="busca">
         <div data-theme="d" data-role="header">
           <h3>
-            Busca pap��is
+            Busca papéis
         </h3>
     </div>
    <!-- DIV ALTERADA -->
@@ -95,8 +95,8 @@
                 <tr class="ui-bar-d">
                     <th><b>Nome</b></th>                        
                     <th data-priority="1">Cotacao</th> <!--data-priority="5" -->                       
-                    <th data-priority="1">D��v/patr</th>                        
-                    <th data-priority="3">Patr. l��q.</th>                        
+                    <th data-priority="1">Div/patr</th>                        
+                    <th data-priority="3">Patr. liq.</th>                        
                     <th data-priority="1">P/L</th>                        
                     <th data-priority="1">ROE</th>
                 </tr>
@@ -213,10 +213,10 @@
             </div><!-- /popup -->
             <br><br>
 
-            <p>Par��grafo com ��cone "saiba mais" <a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" data-icon="info" data-theme="e" data-iconpos="notext">Saiba mais</a></p>
+            <p>Parágrafo com ícone "saiba mais" <a href="#popupInfo" data-rel="popup" data-role="button" class="ui-icon-alt" data-inline="true" data-transition="pop" data-icon="info" data-theme="e" data-iconpos="notext">Saiba mais</a></p>
             <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e" style="max-width:350px;">
                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
-               <p>Explica����o sobre o texto do par��grafo</p>
+               <p>Explicação sobre o texto do parágrafo</p>
            </div>
            <br>
 
@@ -248,7 +248,7 @@
             <li><a href="#" data-icon="gear">Setup</a></li>
         </ul>
     </div><!-- /navbar -->
-    <p style="text-align:center;">Footer com bot��es</p>
+    <p style="text-align:center;">Footer com botões</p>
 </div><!-- /footer -->
 <div data-theme="g" data-role="footer">
     <center>
@@ -262,7 +262,7 @@
     <div data-theme="d" data-role="header">
         <a href="index.html" data-icon="home" data-transition="slide">Home</a>
         <h3>
-            Gr��fico de cota����es
+            Gráfico de cotações
         </h3>
     </div>
 
@@ -296,18 +296,19 @@
     <div data-role="content">
         <table>
             <tr>
-                <td>
-                    <input type="button" id="btnFoto" value="Testar camera"  onClick="capturePhoto();"/>
-                </td>
-                <td>
-                    <input type="button" id="btnMp3" value="Tocar Mp3"  onClick="playAudio('media/audio.mp3');"/>
-                </td>
+                <td><input type="button" id="btnFoto" value="Testar camera" onClick="capturePhoto();"/></td>
+                <td><input type="button" id="btnShowPic" value="Mostrar Foto" onClick="showPicture();"/></td>
             </tr>
             <tr>
+                <td><input type="button" id="btnShowPic" value="Escolher Foto" onClick="choosePicture();"/></td>
+                <td><input type="button" id="btnMp3" value="Tocar Mp3" onClick="playAudio('media/audio.mp3');"/></td>
+            </tr>
+            <tr>
+                <td><input type="button" id="btnNotification" value="Notificação" onClick="showNotification();"/></td>
                 <td></td>
-                <td><input type="button" id="btnNotification" value="Notificação"  onClick="showNotification();"/></td>
             </tr>
         </table>
+        <img style="display:none;" id="largeImage" src="" />
     </div>
 
     
@@ -518,8 +519,7 @@
         var cameraOptions;
         var pictureSource;   // picture source
         var destinationType; // sets the format of returned value 
-    
-        
+        var pictureURI;
     
         // Cordova is ready to be used!
         //
@@ -540,21 +540,8 @@
         // Called when a photo is successfully retrieved
         //
         function onPhotoDataSuccess(imageData) {
-          // Uncomment to view the base64 encoded image data
-          // console.log(imageData);
-    
-          // Get image handle
-          //
-          var smallImage = document.getElementById('smallImage');
-    
-          // Unhide image elements
-          //
-          smallImage.style.display = 'block';
-    
-          // Show the captured photo
-          // The inline CSS rules are used to resize the image
-          //
-          smallImage.src = "data:image/jpeg;base64," + imageData;
+          pictureURI = imageData;
+          console.log(pictureURI);
         }
         
         // Called if something bad happens.
@@ -568,6 +555,34 @@
           navigator.camera.getPicture(onPhotoDataSuccess, onFail, cameraOptions);
         }
         
+        //SHOW PICTURE
+        //#######################################
+        function onPhotoURISuccess(imageURI) {
+            var largeImage = document.getElementById('largeImage');
+            largeImage.style.display = 'block';
+            largeImage.src = imageURI;
+        }
+        
+        function showPicture() {
+            if (pictureURI) {
+                var largeImage = document.getElementById('largeImage');
+                largeImage.style.display = 'block';
+                largeImage.src = pictureURI;
+            }
+            else {
+                alert("Nenhuma foto foi tirada.");
+            }
+        }
+        
+        function choosePicture() {
+            // Retrieve image file location from specified source
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50, 
+                destinationType: destinationType.FILE_URI,
+                sourceType: pictureSource.PHOTOLIBRARY
+            });
+        }
+        //#######################################
         
         // MP3 PLAYER
         //#######################################
