@@ -339,7 +339,7 @@
             },            
             series: [{
                 type: 'candlestick',
-                name: 'PETR4',
+                name: nome,
                 data: data
             }]
         });
@@ -456,7 +456,7 @@
             location.href = "#graficoCotacoes";
             $.ajax( {
                 type: 'Get',                                       
-                url: 'http://buscadorgraficos-prospeccaohtml5.rhcloud.com/buscadorgraficos/rest/papeis/buscar?nomePapel=PETR4&dataInicial=01/01/2010&dataFinal=20/03/2013',
+                url: 'http://buscadorgraficos-prospeccaohtml5.rhcloud.com/buscadorgraficos/rest/papeis/buscar?nomePapel=' + nome + '&dataInicial=01/01/2010&dataFinal=20/03/2013',
                 dataType: 'jsonp',                    
                 success: function(data) {
                             //alert("resultado da busca: "+data);
