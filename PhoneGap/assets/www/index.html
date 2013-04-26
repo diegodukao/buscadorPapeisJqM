@@ -294,6 +294,7 @@
     </div>
     
     <div data-role="content">
+        <p>Olá, <a id="userName"></a></p>
         <table>
             <tr>
                 <td><input type="button" id="btnFoto" value="Testar camera" onClick="capturePhoto();"/></td>
@@ -507,6 +508,7 @@
 
 	<script type="text/javascript" src="cordova-2.5.0.js"></script>
     <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
+    <script type="text/javascript" charset="utf-8" src="SQLitePlugin.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
     
@@ -520,6 +522,7 @@
         var pictureSource;   // picture source
         var destinationType; // sets the format of returned value 
         var pictureURI;
+        var userName;
     
         // Cordova is ready to be used!
         //
@@ -534,7 +537,11 @@
               //targetWidth: 100,
               //targetHeight: 100,
               //popoverOptions: CameraPopoverOptions,
-              saveToPhotoAlbum: true };
+              saveToPhotoAlbum: true 
+            };
+            
+            var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+            db.transaction(populateDB, errorCB, successCB);
         }
         
         // Called when a photo is successfully retrieved
@@ -642,6 +649,46 @@
             navigator.notification.vibrate(1000);
         }
         //#############################################
+        
+        //DB
+        //#############################################
+        function populateDB(tx) {
+             tx.executeSql('CREATE TABLE IF NOT EXISTS USUARIO (id unique, nome)');
+             //tx.executeSql('INSERT INTO USUARIO (id, nome) VALUES (1, "Desconhecido")');
+        }
+        
+        // Transaction error callback
+        //
+        function errorCB(tx, err) {
+            alert("Error processing SQL: "+err);
+        }
+
+        // Transaction success callback
+        //
+        function successCB() {
+            var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+            db.transaction(queryDB, errorCB);
+        }
+        
+        function queryDB(tx) {
+            tx.executeSql('SELECT * FROM USUARIO', [], querySuccess, errorCB);
+        }
+        
+        function querySuccess(tx, results) {
+            console.log("Returned rows = " + results.rows.length);
+            console.log("Nome!!! " + results.rows.item(0).nome);
+            userName = results.rows.item(0).nome;
+            $("#userName")[0].textContent = userName;
+            // this will be true since it was a select statement and so rowsAffected was 0
+            if (!results.rowsAffected) {
+                console.log('No rows affected!');
+                return false;
+            }
+            // for an insert statement, this property will return the ID of the last inserted row
+            console.log("Last inserted row ID = " + results.insertId);
+        }
+        //#############################################
+        
     </script>
 
     </body>
