@@ -523,6 +523,7 @@
         var destinationType; // sets the format of returned value 
         var pictureURI;
         var userName;
+        var db;
     
         // Cordova is ready to be used!
         //
@@ -540,7 +541,7 @@
               saveToPhotoAlbum: true 
             };
             
-            var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+            db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
             db.transaction(populateDB, errorCB, successCB);
         }
         
@@ -653,7 +654,7 @@
         //DB
         //#############################################
         function populateDB(tx) {
-             tx.executeSql('CREATE TABLE IF NOT EXISTS USUARIO (id unique, nome)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS USUARIO (id unique, nome)');
              //tx.executeSql('INSERT INTO USUARIO (id, nome) VALUES (1, "Desconhecido")');
         }
         
@@ -666,7 +667,6 @@
         // Transaction success callback
         //
         function successCB() {
-            var db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
             db.transaction(queryDB, errorCB);
         }
         
@@ -676,16 +676,17 @@
         
         function querySuccess(tx, results) {
             console.log("Returned rows = " + results.rows.length);
-            console.log("Nome!!! " + results.rows.item(0).nome);
-            userName = results.rows.item(0).nome;
-            $("#userName")[0].textContent = userName;
-            // this will be true since it was a select statement and so rowsAffected was 0
-            if (!results.rowsAffected) {
-                console.log('No rows affected!');
-                return false;
+            if (results.rows.length == 0) {
+                db.transaction(function(tx) {
+                    tx.executeSql('INSERT INTO USUARIO (id, nome) VALUES (1, "Desconhecido")')
+                });
+                userName = "Desconhecido";
             }
-            // for an insert statement, this property will return the ID of the last inserted row
-            console.log("Last inserted row ID = " + results.insertId);
+            else {
+                console.log("Nome!!! " + results.rows.item(0).nome);
+                userName = results.rows.item(0).nome;
+            }
+            $("#userName")[0].textContent = userName;
         }
         //#############################################
         
