@@ -220,23 +220,23 @@
            </div>
            <br>
 
-           <p>Exemplo de log in</p>
-           <a href="#popupLogin" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-icon="check" data-theme="a" data-transition="pop">Entrar</a>
-           <div data-role="popup" id="popupMenu" data-theme="a">
-            <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
-                <form>
-                    <div style="padding:10px 20px;">
-                      <h3>Please sign in</h3>
-                      <label for="un" class="ui-hidden-accessible">Username:</label>
-                      <input name="user" id="un" value="" placeholder="username" data-theme="a" type="text">
-                      <label for="pw" class="ui-hidden-accessible">Password:</label>
-                      <input name="pass" id="pw" value="" placeholder="password" data-theme="a" type="password">
-                      <button type="submit" data-theme="b" data-icon="check">Sign in</button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
+            <p>Exemplo de log in</p>
+            <a href="#popupLogin" data-rel="popup" data-position-to="window" data-role="button" data-inline="true" data-icon="check" data-theme="a" data-transition="pop">Entrar</a>
+            <div data-role="popup" id="popupMenu" data-theme="a">
+                <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+                    <form>
+                        <div style="padding:10px 20px;">
+                          <h3>Please sign in</h3>
+                          <label for="un" class="ui-hidden-accessible">Username:</label>
+                          <input name="user" id="un" value="" placeholder="username" data-theme="a" type="text">
+                          <label for="pw" class="ui-hidden-accessible">Password:</label>
+                          <input name="pass" id="pw" value="" placeholder="password" data-theme="a" type="password">
+                          <button type="submit" data-theme="b" data-icon="check">Sign in</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
 
 </div>
 
@@ -306,9 +306,23 @@
             </tr>
             <tr>
                 <td><input type="button" id="btnNotification" value="Notificação" onClick="showNotification();"/></td>
-                <td></td>
+                <td>
+                    <a href="#popupName" data-rel="popup" data-position-to="window" data-role="button" data-transition="pop">Trocar nome</a>
+                </td>
             </tr>
         </table>
+        <!-- POPUP PARA TROCA DE NOME -->
+        <div data-role="popup" id="popupMenu" data-theme="a">
+            <div data-role="popup" id="popupName" data-theme="a" class="ui-corner-all">
+                <div style="padding:10px 20px;">
+                  <h3>Quem é você?</h3>
+                  <label for="un" class="ui-hidden-accessible">Nome:</label>
+                  <input name="name" id="name" placeholder="Nome" data-theme="a" type="text">
+                  <button type="button" onClick="changeName();">Salvar</button>
+                </div>
+            </div>
+        </div>
+        <!-- /POPUP -->
         <img style="display:none;" id="largeImage" src="" />
     </div>
 
@@ -655,7 +669,6 @@
         //#############################################
         function populateDB(tx) {
             tx.executeSql('CREATE TABLE IF NOT EXISTS USUARIO (id unique, nome)');
-             //tx.executeSql('INSERT INTO USUARIO (id, nome) VALUES (1, "Desconhecido")');
         }
         
         // Transaction error callback
@@ -688,6 +701,13 @@
             }
             $("#userName")[0].textContent = userName;
         }
+        
+        function changeName() {
+            userName = $('#name').val();
+            console.log("Novo nome: " + userName);
+            $("#userName")[0].textContent = userName;
+            $("#popupName").popup('close');
+        };
         //#############################################
         
     </script>
