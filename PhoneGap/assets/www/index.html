@@ -705,7 +705,18 @@
         function changeName() {
             userName = $('#name').val();
             console.log("Novo nome: " + userName);
-            $("#userName")[0].textContent = userName;
+            
+            db.transaction(function(tx) {
+                tx.executeSql(
+                    'UPDATE USUARIO SET nome = "' + userName + '" WHERE id = 1',
+                    [],
+                    function(tx, result) {
+                        $("#userName")[0].textContent = userName;
+                    },
+                    errorCB
+                )
+            });
+            
             $("#popupName").popup('close');
         };
         //#############################################
