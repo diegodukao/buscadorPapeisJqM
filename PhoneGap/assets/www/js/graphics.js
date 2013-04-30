@@ -7,7 +7,7 @@
                 selected : 2
             },
             title: {
-                text: 'Hist��rico de ' + nome
+                text: 'Histórico de ' + nome
             },            
             series: [{
                 type: 'candlestick',
@@ -30,7 +30,7 @@
             if( $.trim($(campos[i]).val()).length > 0 && 
                 ( $(campos[i]).val().indexOf(".") !== -1  ||
                     isNaN(parseFloatStringInBrLocale( $(campos[i]).val() )) )  ) {
-                alert("Um dos par��mertos est�� em formato incorreto.");                        
+                alert("Um dos parâmertos está em formato incorreto.");                        
             return false;
         }
     }
@@ -43,17 +43,17 @@
     var divBrutaMax = getFloatStringParameter($('#tbDivPatrMax').val());
 
     if( $.trim(plMin).length>0 &&  $.trim(plMax).length>0 && parseFloat(plMin) > parseFloat(plMax) ) {
-        alert("O P/L m��nimo deve ser menor ou igual ao P/L m��ximo");
-            // importante retornar false para o bot��o n��o permanecer com o estilo "clicado"                
+        alert("O P/L mínimo deve ser menor ou igual ao P/L máximo");
+            // importante retornar false para o botão não permanecer com o estilo "clicado"                
             return false;
         }
         if( $.trim(roeMin).length>0 &&  $.trim(roeMax).length>0 && parseFloat(roeMin) > parseFloat(roeMax) ) {
-            alert("O ROE m��nimo deve ser menor ou igual ao ROE m��ximo");                
+            alert("O ROE mínimo deve ser menor ou igual ao ROE máximo");                
             $('.ui-btn-active').removeClass('ui-btn-active');
             return false;
         }
         if( $.trim(divBrutaMin).length>0 &&  $.trim(divBrutaMax).length>0 && parseFloat(divBrutaMin) > parseFloat(divBrutaMax) ) {
-            alert("A d��vida bruta sobre patrim��nio m��nima deve ser menor ou igual ao m��ximo");                
+            alert("A dívida bruta sobre patrimônio mínima deve ser menor ou igual ao máximo");                
             $('.ui-btn-active').removeClass('ui-btn-active');
             return false;
         }

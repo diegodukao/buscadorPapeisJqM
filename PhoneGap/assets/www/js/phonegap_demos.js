@@ -1,7 +1,5 @@
 // Wait for Cordova to connect with the device
 //
-document.addEventListener("deviceready",onDeviceReady,false);
-
 app.initialize();
 
 var cameraOptions;
@@ -11,24 +9,30 @@ var pictureURI;
 var userName;
 var db;
 
-// Cordova is ready to be used!
-//
-function onDeviceReady() {
-    pictureSource=navigator.camera.PictureSourceType;
-    destinationType=navigator.camera.DestinationType;
-    cameraOptions = { quality : 75,
-      destinationType : Camera.DestinationType.FILE_URI,
-      sourceType : Camera.PictureSourceType.CAMERA,
-      allowEdit : true,
-      encodingType: Camera.EncodingType.JPEG,
-      //targetWidth: 100,
-      //targetHeight: 100,
-      //popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: true 
-    };
+google.maps.event.addDomListener(window, 'load', setup); 
+
+function setup() {
+    document.addEventListener("deviceready",onDeviceReady,false);
     
-    db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
-    db.transaction(populateDB, errorCB, successCB);
+    // Cordova is ready to be used!
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+        cameraOptions = { quality : 75,
+          destinationType : Camera.DestinationType.FILE_URI,
+          sourceType : Camera.PictureSourceType.CAMERA,
+          allowEdit : true,
+          encodingType: Camera.EncodingType.JPEG,
+          //targetWidth: 100,
+          //targetHeight: 100,
+          //popoverOptions: CameraPopoverOptions,
+          saveToPhotoAlbum: true 
+        };
+        
+        db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
+        db.transaction(populateDB, errorCB, successCB);
+    }
 }
 
 // Called when a photo is successfully retrieved
