@@ -27,25 +27,20 @@
 //}
 
 var map1, latlng1, options1;
-function initialize() {
 
-    latlng1 = new google.maps.LatLng(40.716948, -74.003563);
+var onGeoSuccess = function(position) {
+    latlng1 = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     options1 = { zoom: 14, center: latlng1, mapTypeId: google.maps.MapTypeId.ROADMAP };
     map1 = new google.maps.Map(document.getElementById("mapa_canvas"), options1);
+};
 
-}
 $('#mapa').live("pagecreate", function() {
-
-    initialize();
-
+    navigator.geolocation.getCurrentPosition(onGeoSuccess, onError, {enableHighAccuracy:true});
 });
 
 $('#mapa').live('pageshow',function(){
-
-    //console.log("test");
     google.maps.event.trigger(map1, 'resize');
     map1.setOptions(options1); 
-
 });
 
 // onSuccess Callback
