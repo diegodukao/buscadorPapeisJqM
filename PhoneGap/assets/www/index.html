@@ -311,7 +311,7 @@
             </tr>
             <tr>
                 <td><a href="#mapa" data-role="button" data-transition="slide">Mapa</a></td>
-                <td></td>
+                <td><a href="#contatos" data-role="button" data-transition="slide">Contatos</a></td>
             </tr>
         </table>
         <!-- POPUP PARA TROCA DE NOME -->
@@ -325,7 +325,7 @@
                 </div>
             </div>
         </div>
-        <!-- /POPUP -->
+        <!-- /POPUP NOME -->
         <img style="display:none;" id="largeImage" src="" />
     </div>
 
@@ -358,6 +358,22 @@
         </h3>
     </div>
     <script type="text/javascript" src="js/googlemaps.js"></script>
+</div>
+
+<div data-role="page" id="contatos">
+    <div data-theme="d" data-role="header">
+        <a href="#" data-icon="back" data-transition="slide" data-rel="back">Voltar</a>
+        <h1>Exemplo de Contatos</h1>
+    </div>
+    <div data-role="content">
+        <ul id="contactsList"></ul>
+    </div>
+    <div data-theme="d" data-role="footer">
+        <h3>
+            Feito com jQuery Mobile
+        </h3>
+    </div>
+    <script type="text/javascript" src="js/contacts.js"></script>
 </div>
 
 <script type="text/javascript" src="cordova-2.5.0.js"></script>
