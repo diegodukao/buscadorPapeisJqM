@@ -365,9 +365,24 @@
         <a href="#" data-icon="back" data-transition="slide" data-rel="back">Voltar</a>
         <h1>Exemplo de Contatos</h1>
     </div>
+    
     <div data-role="content">
+        <a href="#popupContacts" data-rel="popup" data-position-to="window" data-role="button" data-transition="pop">Buscar contato</a>
+        
         <ul id="contactsList"></ul>
+        
+        <!-- POPUP PARA BUSCA DE CONTATOS -->
+            <div data-role="popup" id="popupContacts" data-theme="a" class="ui-corner-all">
+                <div style="padding:10px 20px;">
+                  <h3>Quem você procura?</h3>
+                  <label for="un" class="ui-hidden-accessible">Nome:</label>
+                  <input name="name" id="contactName" placeholder="Nome" data-theme="a" type="text">
+                  <button type="button" onClick="searchContacts();">Buscar</button>
+                </div>
+            </div>
+        <!-- /POPUP BUSCA DE CONTATOS -->
     </div>
+    
     <div data-theme="d" data-role="footer">
         <h3>
             Feito com jQuery Mobile
