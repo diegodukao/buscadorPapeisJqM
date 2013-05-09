@@ -10,12 +10,16 @@ function searchContacts() {
 };
 
 function onContactsSuccess(contacts) {
-    var contactsStr = "";
-    for (var i=0; i<contacts.length; i++) {
-        console.log("#######" + contacts.length);
-        contactsStr += "<li class='contactItem'>" + contacts[i].displayName + ": " + contacts[i].phoneNumbers[0].value + "</li>";
-    }
-    
     $(".contactItem").remove();
-    $("#contactsList").append(contactsStr);
+    
+    if (contacts.length == 0){
+        $("#contactsList").append("<li class='contactItem'>Nenhum contato encontrado.</li>")
+    }
+    else {
+        for (var i=0; i<contacts.length; i++) {
+            console.log("#######" + contacts.length);
+            contactsStr = "<li class='contactItem'>" + contacts[i].displayName + ": " + contacts[i].phoneNumbers[0].value + "</li>";
+            $("#contactsList").append(contactsStr);
+        }
+    }
 };
