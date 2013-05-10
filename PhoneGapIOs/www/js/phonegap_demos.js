@@ -1,6 +1,6 @@
 // Wait for Cordova to connect with the device
 //
-//app.initialize();
+app.initialize();
 
 var cameraOptions;
 var pictureSource;   // picture source
@@ -9,9 +9,9 @@ var pictureURI;
 var userName;
 var db;
 
-//google.maps.event.addDomListener(window, 'load', setup);
+google.maps.event.addDomListener(window, 'load', setup); 
 
-//function setup() {
+function setup() {
     document.addEventListener("deviceready",onDeviceReady,false);
     
     // Cordova is ready to be used!
@@ -30,13 +30,10 @@ var db;
           saveToPhotoAlbum: true 
         };
         
-        
-        
-        
         db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
         db.transaction(populateDB, errorCB, successCB);
     }
-//}
+}
 
 // Called when a photo is successfully retrieved
 //
